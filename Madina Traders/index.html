@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="ur">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Madina Traders — Management System</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Nastaliq+Urdu&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --green: #1a5c3a;
+      --green-light: #2d7a50;
+      --green-pale: #e8f5ed;
+      --green-mid: #c2e0cd;
+      --gold: #b8860b;
+      --gold-light: #f0c040;
+      --gold-pale: #fdf6e3;
+      --red: #c0392b;
+      --red-pale: #fdecea;
+      --gray: #f4f4f2;
+      --gray2: #e8e8e4;
+      --text: #1a1a18;
+      --text2: #555550;
+      --text3: #888882;
+      --white: #ffffff;
+      --border: #d4d4cc;
+      --shadow: 0 2px 12px rgba(26, 92, 58, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: #f0f0ec;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: var(--green);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .shop-name {
+      font-family: 'Amiri', serif;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+      color: var(--gold-light);
+    }
+
+    .shop-sub {
+      font-size: 11px;
+      color: #a0d8b0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-date {
+      font-size: 12px;
+      color: #a0d8b0;
+    }
+
+    .nav {
+      background: var(--white);
+      border-bottom: 2px solid var(--green);
+      display: flex;
+      gap: 0;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      padding: 14px 28px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text2);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: var(--green);
+      background: var(--green-pale);
+    }
+
+    .nav-btn.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+      background: var(--green-pale);
+    }
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .stat-val.red {
+      color: var(--red);
+    }
+
+    .stat-val.gold {
+      color: var(--gold);
+    }
+
+    .sec-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .sec-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    .btn {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--green-light);
+    }
+
+    .btn-outline {
+      background: none;
+      color: var(--green);
+      border: 1.5px solid var(--green);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: var(--green-pale);
+    }
+
+    .btn-red {
+      background: var(--red);
+    }
+
+    .btn-red:hover {
+      background: #a93226;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+    }
+
+    .btn-gold:hover {
+      background: #9a7009;
+    }
+
+    .tbl-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th {
+      background: var(--green);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray2);
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--green-pale);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-ok {
+      background: var(--green-pale);
+      color: var(--green);
+      border: 1px solid var(--green-mid);
+    }
+
+    .badge-low {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+    }
+
+    .badge-out {
+      background: var(--red-pale);
+      color: var(--red);
+      border: 1px solid #f5c6cb;
+    }
+
+    .badge-exp {
+      background: var(--red-pale);
+      color: var(--red);
+      border: 1px solid #f5c6cb;
+    }
+
+    .badge-cash {
+      background: var(--green-pale);
+      color: var(--green);
+      border: 1px solid var(--green-mid);
+    }
+
+    .badge-udhar {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+    }
+
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text3);
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      background: var(--gray);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--green);
+      background: #fff;
+    }
+
+    .bill-items {
+      margin: 1rem 0;
+    }
+
+    .bill-item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 36px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .bill-item-row input,
+    .bill-item-row select {
+      font-size: 12px;
+    }
+
+    .remove-btn {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .bill-total {
+      background: var(--green-pale);
+      border: 1px solid var(--green-mid);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .bill-total-label {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .bill-total-val {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .receipt-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .receipt-modal.open {
+      display: flex;
+    }
+
+    .receipt-box {
+      background: #fff;
+      width: 340px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .receipt-inner {
+      padding: 24px;
+      font-size: 12px;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+    }
+
+    .receipt-shop {
+      font-family: 'Amiri', serif;
+      font-size: 20px;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .receipt-sub {
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 1px;
+    }
+
+    .r-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      font-size: 12px;
+    }
+
+    .r-divider {
+      border: none;
+      border-top: 1px dashed #ccc;
+      margin: 8px 0;
+    }
+
+    .r-total {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .r-footer {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 12px;
+    }
+
+    .udhar-badge {
+      text-align: center;
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    .receipt-actions {
+      background: var(--gray);
+      padding: 12px 16px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+
+    .customer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .cust-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cust-card:hover {
+      border-color: var(--green);
+      box-shadow: var(--shadow);
+    }
+
+    .cust-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cust-phone {
+      font-size: 12px;
+      color: var(--text3);
+      margin-bottom: 10px;
+    }
+
+    .cust-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .cust-stat {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .cust-stat span {
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .cust-stat.red span {
+      color: var(--red);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .modal-head {
+      background: var(--green);
+      color: #fff;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: 'Amiri', serif;
+      font-size: 20px;
+      color: var(--gold-light);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .search-bar {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      width: 100%;
+      max-width: 320px;
+      outline: none;
+      margin-bottom: 1rem;
+    }
+
+    .search-bar:focus {
+      border-color: var(--green);
+    }
+
+    .alert {
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-warn {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+    }
+
+    .alert-red {
+      background: var(--red-pale);
+      color: var(--red);
+      border: 1px solid #f5c6cb;
+    }
+
+    @media print {
+      body>*:not(.receipt-modal) {
+        display: none !important;
+      }
+
+      .receipt-modal {
+        display: flex !important;
+        position: static;
+        background: none;
+      }
+
+      .receipt-box {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .receipt-actions {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div>
+      <div class="shop-name">Madina Traders</div>
+      <div class="shop-sub">Spray Shop Management System</div>
+    </div>
+    <div class="header-date" id="hdr-date"></div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showPage('stock')">Stock Report</button>
+    <button class="nav-btn" onclick="showPage('billing')">New Bill</button>
+    <button class="nav-btn" onclick="showPage('bills')">All Bills</button>
+    <button class="nav-btn" onclick="showPage('customers')">Customers</button>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="stats" id="stats-bar"></div>
+      <div id="alerts-zone"></div>
+      <div class="sec-head">
+        <div class="sec-title">Recent Bills</div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment</th>
+            </tr>
+          </thead>
+          <tbody id="recent-bills-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STOCK REPORT -->
+    <div id="page-stock" class="page">
+      <div class="sec-head">
+        <div class="sec-title">Stock Report</div>
+        <button class="btn" onclick="showAddStock()">+ Add Product</button>
+      </div>
+      <div id="add-stock-form" style="display:none;" class="form-card">
+        <div class="form-grid" id="stock-form-grid">
+          <div class="form-group"><label>Product Name</label><input id="s-name" placeholder="e.g. Confidor"></div>
+          <div class="form-group"><label>Pack Size</label><input id="s-pack" placeholder="e.g. 100ml"></div>
+          <div class="form-group"><label>MRP (Rs.)</label><input id="s-mrp" type="number" placeholder="0"></div>
+          <div class="form-group"><label>Qty in Stock</label><input id="s-qty" type="number" placeholder="0"></div>
+          <div class="form-group"><label>Batch No.</label><input id="s-batch" placeholder="e.g. BT-2024-01"></div>
+          <div class="form-group"><label>Expiry Date</label><input id="s-exp" type="date"></div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px;">
+          <button class="btn" onclick="saveStock()">Save Product</button>
+          <button class="btn-outline" onclick="hideAddStock()">Cancel</button>
+        </div>
+      </div>
+      <input class="search-bar" placeholder="Search product..." oninput="renderStock(this.value)">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Pack Size</th>
+              <th>MRP</th>
+              <th>Batch No.</th>
+              <th>Expiry Date</th>
+              <th>Stock Qty</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="stock-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div id="page-billing" class="page">
+      <div class="form-card">
+        <div class="sec-title" style="margin-bottom:1rem;">Customer Details</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Customer Name</label><input id="b-cname" placeholder="Customer ka naam"></div>
+          <div class="form-group"><label>Phone Number</label><input id="b-cphone" placeholder="03XX-XXXXXXX"></div>
+          <div class="form-group"><label>Company</label>
+            <select id="b-company"
+              style="font-size:13px;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--gray);font-family:'IBM Plex Mono',monospace;">
+              <option value="">-- Company Select Karein --</option>
+              <option value="Tarzan">Tarzan</option>
+              <option value="Awari">Awari</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Date</label><input id="b-date" type="date"></div>
+          <div class="form-group"><label>Invoice #</label><input id="b-inv" readonly style="background:#e8e8e4;"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="sec-title" style="margin-bottom:1rem;">Items</div>
+        <div class="bill-items" id="bill-items-wrap">
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 36px;gap:8px;margin-bottom:6px;">
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);">Product</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);">Pack
+              Size</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);">Price</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);">Qty</span>
+            <span></span>
+          </div>
+          <div id="bill-rows"></div>
+        </div>
+        <button class="btn-outline" onclick="addBillRow()" style="font-size:12px; margin-bottom:12px;">+ Add
+          Item</button>
+        <div class="bill-total">
+          <div>
+            <div class="bill-total-label">Payment Type</div>
+            <select id="b-paytype"
+              style="margin-top:4px;font-size:13px;padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--gray);">
+              <option value="cash">Cash</option>
+              <option value="udhar">Udhar</option>
+            </select>
+          </div>
+          <div style="text-align:right;">
+            <div class="bill-total-label">Total Amount</div>
+            <div class="bill-total-val" id="bill-total-display">Rs. 0</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn" onclick="generateBill()">Generate Bill & Print</button>
+        <button class="btn-outline" onclick="clearBillForm()">Clear</button>
+      </div>
+    </div>
+
+    <!-- ALL BILLS -->
+    <div id="page-bills" class="page">
+      <div class="sec-head">
+        <div class="sec-title">All Bills</div>
+      </div>
+      <input class="search-bar" placeholder="Search by customer or invoice..." oninput="renderBills(this.value)">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Company</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="bills-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="page-customers" class="page">
+      <div class="sec-head">
+        <div class="sec-title">Customer Records</div>
+      </div>
+      <input class="search-bar" placeholder="Search customer..." oninput="renderCustomers(this.value)">
+      <div class="customer-grid" id="cust-grid"></div>
+    </div>
+
+  </div>
+
+  <!-- Receipt Modal -->
+  <div class="receipt-modal" id="receipt-modal">
+    <div class="receipt-box">
+      <div class="receipt-inner" id="receipt-content"></div>
+      <div class="receipt-actions">
+        <button class="btn-outline" onclick="closeReceipt()">Close</button>
+        <button class="btn btn-gold" onclick="window.print()">🖨 Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Detail Modal -->
+  <div class="modal" id="cust-modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div class="modal-title" id="cust-modal-name">Customer</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-gold" style="padding:6px 14px;font-size:11px;" onclick="printCustHistory()">🖨 Print
+            History</button>
+          <button class="modal-close" onclick="closeCustModal()">×</button>
+        </div>
+      </div>
+      <div class="modal-body" id="cust-modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── DATA STORE ──────────────────────────────────────────────────────────────
+    let stock = JSON.parse(localStorage.getItem('mt_stock') || '[]');
+    let bills = JSON.parse(localStorage.getItem('mt_bills') || '[]');
+    let customers = JSON.parse(localStorage.getItem('mt_customers') || '{}');
+    let invoiceCounter = parseInt(localStorage.getItem('mt_inv') || '1000');
+
+    function save() {
+      localStorage.setItem('mt_stock', JSON.stringify(stock));
+      localStorage.setItem('mt_bills', JSON.stringify(bills));
+      localStorage.setItem('mt_customers', JSON.stringify(customers));
+      localStorage.setItem('mt_inv', invoiceCounter.toString());
+    }
+
+    // ── INIT ────────────────────────────────────────────────────────────────────
+    window.onload = function () {
+      document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('en-PK', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+      document.getElementById('b-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('b-inv').value = 'INV-' + (invoiceCounter + 1);
+      if (stock.length === 0) {
+        stock = [
+          { id: 1, name: 'Confidor', pack: '100ml', mrp: 850, qty: 24, batch: 'BT-2024-01', expiry: '2026-06-30' },
+          { id: 2, name: 'Racer', pack: '250ml', mrp: 1200, qty: 8, batch: 'BT-2024-02', expiry: '2025-12-31' },
+          { id: 3, name: 'Topik', pack: '50g', mrp: 600, qty: 3, batch: 'BT-2024-03', expiry: '2026-09-15' },
+          { id: 4, name: 'Karate', pack: '1L', mrp: 2200, qty: 0, batch: 'BT-2024-04', expiry: '2027-03-20' },
+        ];
+        save();
+      }
+      renderAll();
+    };
+
+    function renderAll() {
+      renderDashboard();
+      renderStock();
+      renderBills();
+      renderCustomers();
+    }
+
+    // ── NAVIGATION ───────────────────────────────────────────────────────────────
+    function showPage(p) {
+      document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('page-' + p).classList.add('active');
+      event.target.classList.add('active');
+      if (p === 'billing') refreshBillSelects();
+    }
+
+    // ── DASHBOARD ────────────────────────────────────────────────────────────────
+    function renderDashboard() {
+      const totalProducts = stock.length;
+      const lowStock = stock.filter(s => s.qty > 0 && s.qty <= 5).length;
+      const outOfStock = stock.filter(s => s.qty === 0).length;
+      const totalUdhar = bills.filter(b => b.paytype === 'udhar').reduce((a, b) => a + b.total, 0);
+      document.getElementById('stats-bar').innerHTML = `
+    <div class="stat"><div class="stat-label">Total Products</div><div class="stat-val">${totalProducts}</div></div>
+    <div class="stat"><div class="stat-label">Low Stock</div><div class="stat-val gold">${lowStock}</div></div>
+    <div class="stat"><div class="stat-label">Out of Stock</div><div class="stat-val red">${outOfStock}</div></div>
+    <div class="stat"><div class="stat-label">Total Udhar (Rs.)</div><div class="stat-val red">${totalUdhar.toLocaleString()}</div></div>
+  `;
+      let alertsHtml = '';
+      const today = new Date();
+      stock.forEach(s => {
+        const exp = new Date(s.expiry);
+        const days = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+        if (days <= 30 && days > 0) alertsHtml += `<div class="alert alert-warn">⚠ ${s.name} (${s.pack}) — Expiry mein sirf ${days} din baqi hain (${s.expiry})</div>`;
+        if (days <= 0) alertsHtml += `<div class="alert alert-red">✗ ${s.name} (${s.pack}) — EXPIRED (${s.expiry})</div>`;
+        if (s.qty === 0) alertsHtml += `<div class="alert alert-red">✗ ${s.name} (${s.pack}) — Stock khatam ho gayi!</div>`;
+        else if (s.qty <= 5) alertsHtml += `<div class="alert alert-warn">⚠ ${s.name} (${s.pack}) — Sirf ${s.qty} units baqi hain</div>`;
+      });
+      document.getElementById('alerts-zone').innerHTML = alertsHtml;
+      const recent = [...bills].reverse().slice(0, 8);
+      document.getElementById('recent-bills-body').innerHTML = recent.map(b => `
+    <tr>
+      <td>${b.invoice}</td>
+      <td>${b.cname}</td>
+      <td>${b.date}</td>
+      <td>Rs. ${b.total.toLocaleString()}</td>
+      <td><span class="badge badge-${b.paytype}">${b.paytype === 'cash' ? 'Cash ✓' : 'Udhar'}</span></td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px;">Koi bill nahi</td></tr>';
+    }
+
+    // ── STOCK ────────────────────────────────────────────────────────────────────
+    function renderStock(filter = '') {
+      const today = new Date();
+      const filtered = stock.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.pack.toLowerCase().includes(filter.toLowerCase()));
+      document.getElementById('stock-body').innerHTML = filtered.map(s => {
+        const exp = new Date(s.expiry);
+        const days = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+        let qtyBadge = s.qty === 0 ? 'badge-out' : s.qty <= 5 ? 'badge-low' : 'badge-ok';
+        let expBadge = days <= 0 ? 'badge-exp' : days <= 30 ? 'badge-low' : 'badge-ok';
+        return `<tr>
+      <td><strong>${s.name}</strong></td>
+      <td>${s.pack}</td>
+      <td>Rs. ${s.mrp.toLocaleString()}</td>
+      <td>${s.batch}</td>
+      <td><span class="badge ${expBadge}">${s.expiry}</span></td>
+      <td>${s.qty}</td>
+      <td><span class="badge ${qtyBadge}">${s.qty === 0 ? 'Out' : s.qty <= 5 ? 'Low' : 'OK'}</span></td>
+      <td><button class="remove-btn" onclick="deleteStock(${s.id})">×</button></td>
+    </tr>`;
+      }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px;">Stock mein koi product nahi</td></tr>';
+    }
+
+    function showAddStock() { document.getElementById('add-stock-form').style.display = 'block'; }
+    function hideAddStock() { document.getElementById('add-stock-form').style.display = 'none'; }
+
+    function saveStock() {
+      const name = document.getElementById('s-name').value.trim();
+      const pack = document.getElementById('s-pack').value.trim();
+      const mrp = parseFloat(document.getElementById('s-mrp').value) || 0;
+      const qty = parseInt(document.getElementById('s-qty').value) || 0;
+      const batch = document.getElementById('s-batch').value.trim();
+      const expiry = document.getElementById('s-exp').value;
+      if (!name || !pack || !expiry) { alert('Product name, pack size aur expiry date zaroor darj karein'); return; }
+      const id = Date.now();
+      stock.push({ id, name, pack, mrp, qty, batch, expiry });
+      save();
+      renderStock();
+      renderDashboard();
+      ['s-name', 's-pack', 's-mrp', 's-qty', 's-batch', 's-exp'].forEach(id => document.getElementById(id).value = '');
+      hideAddStock();
+      refreshBillSelects();
+    }
+
+    function deleteStock(id) {
+      if (!confirm('Is product ko delete karein?')) return;
+      stock = stock.filter(s => s.id !== id);
+      save();
+      renderStock();
+      renderDashboard();
+    }
+
+    // ── BILLING ──────────────────────────────────────────────────────────────────
+    function refreshBillSelects() {
+      document.querySelectorAll('.prod-select').forEach(sel => {
+        const val = sel.value;
+        sel.innerHTML = '<option value="">-- Product select karein --</option>' + stock.map(s => `<option value="${s.id}" ${s.id == val ? 'selected' : ''}>${s.name} (${s.pack}) — Rs.${s.mrp}</option>`).join('');
+        if (val) sel.value = val;
+      });
+    }
+
+    let billRowCount = 0;
+    function addBillRow() {
+      billRowCount++;
+      const rowId = 'row-' + billRowCount;
+      const div = document.createElement('div');
+      div.className = 'bill-item-row';
+      div.id = rowId;
+      div.innerHTML = `
+    <select class="prod-select" onchange="fillPackPrice('${rowId}')">
+      <option value="">-- Product select karein --</option>
+      ${stock.map(s => `<option value="${s.id}">${s.name} (${s.pack}) — Rs.${s.mrp}</option>`).join('')}
+    </select>
+    <input class="pack-field" readonly style="background:#e8e8e4;" placeholder="Pack">
+    <input class="price-field" type="number" placeholder="Price" oninput="calcTotal()">
+    <input class="qty-field" type="number" placeholder="Qty" value="1" min="1" oninput="calcTotal()">
+    <button class="remove-btn" onclick="document.getElementById('${rowId}').remove(); calcTotal();">×</button>
+  `;
+      document.getElementById('bill-rows').appendChild(div);
+      calcTotal();
+    }
+
+    function fillPackPrice(rowId) {
+      const row = document.getElementById(rowId);
+      const sel = row.querySelector('.prod-select');
+      const sid = parseInt(sel.value);
+      const prod = stock.find(s => s.id === sid);
+      if (prod) {
+        row.querySelector('.pack-field').value = prod.pack;
+        row.querySelector('.price-field').value = prod.mrp;
+      }
+      calcTotal();
+    }
+
+    function calcTotal() {
+      let total = 0;
+      document.querySelectorAll('.bill-item-row').forEach(row => {
+        const price = parseFloat(row.querySelector('.price-field').value) || 0;
+        const qty = parseInt(row.querySelector('.qty-field').value) || 0;
+        total += price * qty;
+      });
+      document.getElementById('bill-total-display').textContent = 'Rs. ' + total.toLocaleString();
+    }
+
+    function generateBill() {
+      const cname = document.getElementById('b-cname').value.trim();
+      const cphone = document.getElementById('b-cphone').value.trim();
+      const date = document.getElementById('b-date').value;
+      const paytype = document.getElementById('b-paytype').value;
+      const company = document.getElementById('b-company').value;
+      if (!cname || !date) { alert('Customer naam aur date zaroor darj karein'); return; }
+      const rows = document.querySelectorAll('.bill-item-row');
+      if (rows.length === 0) { alert('Kam az kam ek item add karein'); return; }
+      const items = [];
+      let valid = true;
+      rows.forEach(row => {
+        const sid = parseInt(row.querySelector('.prod-select').value);
+        const pack = row.querySelector('.pack-field').value;
+        const price = parseFloat(row.querySelector('.price-field').value) || 0;
+        const qty = parseInt(row.querySelector('.qty-field').value) || 0;
+        if (!sid || qty < 1) { valid = false; return; }
+        const prod = stock.find(s => s.id === sid);
+        if (!prod) return;
+        if (prod.qty < qty) { alert(`${prod.name} mein sirf ${prod.qty} units hain!`); valid = false; return; }
+        items.push({ sid, name: prod.name, pack, price, qty, subtotal: price * qty });
+      });
+      if (!valid) return;
+      invoiceCounter++;
+      const invoice = 'INV-' + invoiceCounter;
+      const total = items.reduce((a, i) => a + i.subtotal, 0);
+      items.forEach(item => {
+        const prod = stock.find(s => s.id === item.sid);
+        if (prod) prod.qty -= item.qty;
+      });
+      const bill = { invoice, cname, cphone, company, date, items, total, paytype };
+      bills.push(bill);
+      const custKey = cphone || cname;
+      if (!customers[custKey]) customers[custKey] = { name: cname, phone: cphone, bills: [] };
+      customers[custKey].bills.push(invoice);
+      customers[custKey].name = cname;
+      customers[custKey].phone = cphone;
+      save();
+      renderAll();
+      showReceipt(bill);
+      document.getElementById('b-inv').value = 'INV-' + (invoiceCounter + 1);
+    }
+
+    function clearBillForm() {
+      document.getElementById('b-cname').value = '';
+      document.getElementById('b-cphone').value = '';
+      document.getElementById('b-company').value = '';
+      document.getElementById('b-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('bill-rows').innerHTML = '';
+      billRowCount = 0;
+      calcTotal();
+    }
+
+    // ── RECEIPT ──────────────────────────────────────────────────────────────────
+    function showReceipt(bill) {
+      const payLabel = bill.paytype === 'cash' ? '<span style="color:#1a5c3a;font-weight:500;">Cash — Paid ✓</span>' : '<span style="color:#856404;font-weight:500;">Udhar</span>';
+      const udharNote = bill.paytype === 'udhar' ? '<div class="udhar-badge">⚠ UDHAR — Jald ada karein — JazakAllah</div>' : '';
+      const companyLine = bill.company ? `<div class="r-row"><span style="color:#888;">Company</span><span style="font-weight:600;color:var(--green);">${bill.company}</span></div>` : '';
+      document.getElementById('receipt-content').innerHTML = `
+    <div class="receipt-header">
+      <div class="receipt-shop">Madina Traders</div>
+      <div class="receipt-sub">Spray Shop</div>
+      <div style="font-size:10px;color:#888;margin-top:2px;">${bill.date}</div>
+    </div>
+    <div class="r-row"><span style="color:#888;">Invoice</span><span>${bill.invoice}</span></div>
+    <div class="r-row"><span style="color:#888;">Customer</span><span>${bill.cname}</span></div>
+    <div class="r-row"><span style="color:#888;">Phone</span><span>${bill.cphone || '—'}</span></div>
+    ${companyLine}
+    <hr class="r-divider">
+    ${bill.items.map(i => `
+      <div class="r-row"><span>${i.name} (${i.pack})</span><span>x${i.qty}</span></div>
+      <div class="r-row"><span style="color:#888;">@ Rs.${i.price.toLocaleString()}</span><span>Rs.${i.subtotal.toLocaleString()}</span></div>
+    `).join('')}
+    <hr class="r-divider">
+    <div class="r-row r-total"><span>Total</span><span>Rs. ${bill.total.toLocaleString()}</span></div>
+    <div class="r-row" style="margin-top:4px;"><span style="color:#888;">Payment</span><span>${payLabel}</span></div>
+    ${udharNote}
+    <div class="r-footer">Shukriya! — Madina Traders<br>Dobara zaroor tashreef laayein</div>
+  `;
+      document.getElementById('receipt-modal').classList.add('open');
+    }
+
+    function closeReceipt() { document.getElementById('receipt-modal').classList.remove('open'); }
+
+    // ── ALL BILLS ─────────────────────────────────────────────────────────────────
+    function renderBills(filter = '') {
+      const filtered = [...bills].reverse().filter(b =>
+        b.cname.toLowerCase().includes(filter.toLowerCase()) ||
+        b.invoice.toLowerCase().includes(filter.toLowerCase())
+      );
+      document.getElementById('bills-body').innerHTML = filtered.map(b => `
+    <tr>
+      <td>${b.invoice}</td>
+      <td>${b.cname}</td>
+      <td>${b.cphone || '—'}</td>
+      <td>${b.company ? `<span class="badge badge-ok">${b.company}</span>` : '—'}</td>
+      <td>${b.date}</td>
+      <td>${b.items.length} items</td>
+      <td>Rs. ${b.total.toLocaleString()}</td>
+      <td><span class="badge badge-${b.paytype}">${b.paytype === 'cash' ? 'Cash ✓' : 'Udhar'}</span></td>
+      <td><button class="btn btn-gold" style="padding:5px 10px;font-size:11px;" onclick='showReceipt(${JSON.stringify(b)})'>Receipt</button></td>
+    </tr>
+  `).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:20px;">Koi bill nahi mila</td></tr>';
+    }
+
+    // ── CUSTOMERS ─────────────────────────────────────────────────────────────────
+    function renderCustomers(filter = '') {
+      const keys = Object.keys(customers).filter(k =>
+        customers[k].name.toLowerCase().includes((filter || '').toLowerCase()) ||
+        (customers[k].phone || '').includes(filter || '')
+      );
+      if (keys.length === 0) {
+        document.getElementById('cust-grid').innerHTML = '<p style="color:var(--text3);font-size:13px;">Koi customer record nahi mila</p>';
+        return;
+      }
+      document.getElementById('cust-grid').innerHTML = keys.map(k => {
+        const c = customers[k];
+        const custBills = bills.filter(b => c.bills.includes(b.invoice));
+        const totalSpent = custBills.reduce((a, b) => a + b.total, 0);
+        const udhar = custBills.filter(b => b.paytype === 'udhar').reduce((a, b) => a + b.total, 0);
+        return `<div class="cust-card" onclick="showCustDetail('${k}')">
+      <div class="cust-name">${c.name}</div>
+      <div class="cust-phone">${c.phone || 'Phone nahi'}</div>
+      <div class="cust-stats">
+        <div class="cust-stat">Bills <span>${custBills.length}</span></div>
+        <div class="cust-stat">Total <span>Rs.${totalSpent.toLocaleString()}</span></div>
+        ${udhar > 0 ? `<div class="cust-stat red">Udhar <span>Rs.${udhar.toLocaleString()}</span></div>` : ''}
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    function showCustDetail(key) {
+      currentCustKey = key;
+      const c = customers[key];
+      const custBills = bills.filter(b => c.bills.includes(b.invoice));
+      const totalSpent = custBills.reduce((a, b) => a + b.total, 0);
+      const udhar = custBills.filter(b => b.paytype === 'udhar').reduce((a, b) => a + b.total, 0);
+      document.getElementById('cust-modal-name').textContent = c.name;
+      document.getElementById('cust-modal-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;">
+      <div class="stat"><div class="stat-label">Total Bills</div><div class="stat-val">${custBills.length}</div></div>
+      <div class="stat"><div class="stat-label">Total Spent</div><div class="stat-val">Rs.${totalSpent.toLocaleString()}</div></div>
+      <div class="stat"><div class="stat-label">Udhar</div><div class="stat-val ${udhar > 0 ? 'red' : ''}">Rs.${udhar.toLocaleString()}</div></div>
+    </div>
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:10px;">Purchase History</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Invoice</th><th>Date</th><th>Company</th><th>Items</th><th>Total</th><th>Payment</th></tr></thead>
+        <tbody>${[...custBills].reverse().map(b => `
+          <tr>
+            <td>${b.invoice}</td>
+            <td>${b.date}</td>
+            <td>${b.company ? `<span class="badge badge-ok">${b.company}</span>` : '—'}</td>
+            <td>${b.items.map(i => i.name + ' x' + i.qty).join(', ')}</td>
+            <td>Rs.${b.total.toLocaleString()}</td>
+            <td><span class="badge badge-${b.paytype}">${b.paytype === 'cash' ? 'Cash ✓' : 'Udhar'}</span></td>
+          </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text3);">Koi record nahi</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  `;
+      document.getElementById('cust-modal').classList.add('open');
+    }
+
+    function closeCustModal() { document.getElementById('cust-modal').classList.remove('open'); }
+
+    // ── PRINT CUSTOMER HISTORY ───────────────────────────────────────────────────
+    let currentCustKey = null;
+    function printCustHistory() {
+      const key = currentCustKey;
+      if (!key) return;
+      const c = customers[key];
+      const custBills = bills.filter(b => c.bills.includes(b.invoice));
+      const totalSpent = custBills.reduce((a, b) => a + b.total, 0);
+      const udhar = custBills.filter(b => b.paytype === 'udhar').reduce((a, b) => a + b.total, 0);
+      const rows = [...custBills].reverse().map(b => `
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">${b.invoice}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">${b.date}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">${b.company || '—'}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">${b.items.map(i => i.name + ' x' + i.qty).join(', ')}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">Rs.${b.total.toLocaleString()}</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #ddd;">${b.paytype === 'cash' ? 'Cash ✓' : 'Udhar'}</td>
+    </tr>`).join('');
+      const win = window.open('', '_blank');
+      win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Customer History — ${c.name}</title>
+    <style>
+      body { font-family: 'IBM Plex Mono', monospace; padding: 24px; font-size: 13px; color: #1a1a18; }
+      h2 { color: #1a5c3a; font-size: 20px; margin-bottom: 4px; }
+      .sub { color: #888; font-size: 11px; letter-spacing: 1px; margin-bottom: 16px; }
+      .info { display: flex; gap: 32px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; background: #f4f9f6; }
+      .info div { font-size: 12px; } .info span { font-weight: 600; color: #1a5c3a; display: block; font-size: 16px; }
+      table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      th { background: #1a5c3a; color: #fff; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .footer { margin-top: 20px; text-align: center; font-size: 11px; color: #888; }
+      @media print { button { display: none; } }
+    </style></head><body>
+    <h2>Madina Traders — Customer History</h2>
+    <div class="sub">Spray Shop Management System &nbsp;|&nbsp; Printed: ${new Date().toLocaleDateString('en-PK')}</div>
+    <div class="info">
+      <div>Customer<span>${c.name}</span></div>
+      <div>Phone<span>${c.phone || '—'}</span></div>
+      <div>Total Bills<span>${custBills.length}</span></div>
+      <div>Total Spent<span>Rs.${totalSpent.toLocaleString()}</span></div>
+      ${udhar > 0 ? `<div>Udhar<span style="color:#c0392b;">Rs.${udhar.toLocaleString()}</span></div>` : ''}
+    </div>
+    <table>
+      <thead><tr><th>Invoice</th><th>Date</th><th>Company</th><th>Items</th><th>Total</th><th>Payment</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" style="text-align:center;padding:16px;color:#888;">Koi record nahi</td></tr>'}</tbody>
+    </table>
+    <div class="footer">Madina Traders — Shukriya!</div>
+    <br><button onclick="window.print()" style="background:#1a5c3a;color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:13px;cursor:pointer;">🖨 Print</button>
+  </body></html>`);
+      win.document.close();
+    }
+
+    // ── PREVENT DATA LOSS ON CLOSE ───────────────────────────────────────────────
+    window.addEventListener('beforeunload', function () {
+      localStorage.setItem('mt_stock', JSON.stringify(stock));
+      localStorage.setItem('mt_bills', JSON.stringify(bills));
+      localStorage.setItem('mt_customers', JSON.stringify(customers));
+      localStorage.setItem('mt_inv', invoiceCounter.toString());
+    });
+
+    // Init bill row
+    addBillRow();
+  </script>
+</body>
+
+</html>
